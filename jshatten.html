@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Dot Art Making Tool</title>
+  <style>
+  body{
+    background-color: rgb(250,250,100);
+  }
+    td{
+      border:1px solid;
+      width: 30px;
+      height: 30px;
+    }
+    table{
+      border-collapse: collapse;
+      background-color: white;
+    }
+    #zone_c{
+      background-color: white;
+    }
+    </style>
+  </head>
+  <body>
+
+    <div id="picdiv">
+      <!--img src="smile.jpg" alt="noimg"-->
+      <table id="dotTBL">
+
+      </table><br>
+    </div>
+    <div id="zone_c">
+      <p>カラーパレット</p>
+      <table id="ColorTBL">
+        <tr>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <input type="button" value="クリア" onclick="clearCell()">
+      <input type="button" value="画像変換" onclick="drawCanvas()">
+      <canvas id="picture" width="32" height="32" style="border:solid 1px;"></canvas>
+      <br>
+      <input type="button" value="保存(仮)" onclick="save()">
+    </div>
+
+      <script>
+        var Matrix_Rows=32;
+        var Matrix_Cols=32;
+        var Color_Index="black";
+        var dotTbl = document.getElementById("dotTBL");
+        var colTbl = document.getElementById("ColorTBL");
+        var cvs = document.getElementById("picture");
+        var ctx = cvs.getContext("2d");
+        function dotTable(){
+          for(var i=0;i<Matrix_Rows;i++){
+            var row = dotTbl.insertRow(-1);
+            for(var j=0;j<Matrix_Cols;j++){
+              var cell = row.insertCell(-1);
+              cell.onclick=function(){
+                this.style.backgroundColor=Color_Index;
+              }
+            }
+          }
+        }
+
+        var COL_SAMPLE = ["black","gray","white","red","orange","yellow","lime","cyan","blue","magenta"];
+        //16真での表記がむずい255割る16の値でくべてゃできる
+/*//できる
+        var COL_SAMPLE=["rgb(0,0,0)","rgb(255,255,0)"];
+        COL_SAMPLE[2]="rgb(0,0,255)";
+        COL_SAMPLE[0]="rgb(0,255,255)";
+*/
+/*
+//なぜできない
+        var co=0;
+        var COL_SAMPLE=["black","blue"];
+        for(var r=1;r<10;r++){
+        //for(var g=100;g<110;g++){
+        //for(var b=100;b<110;b++){
+       COL_SAMPLE[co]="rgb(r*10,0,0)";
+        co++;
+      //}
+      //}
+      }
+*/
+
+        function colorTable(){
+          for(var i=0;i<COL_SAMPLE.length;i++){
+            var cell = colTbl.rows[0].insertCell(-1);
+            cell.style.backgroundColor=COL_SAMPLE[i];
+            cell.innerHTML="<img src='pensaki.png'>";
+            cell.style.padding="0px";
+            cell.style.border="0px";
+            cell.onclick=function(){
+              Color_Index=this.style.backgroundColor;
+            }
+          }
+        }
+        function clearCell(){
+          for(var i=0;i<Matrix_Rows;i++){
+            for(var j=0;j<Matrix_Cols;j++){
+              dotTbl.rows[i].cells[j].style.backgroundColor="white";
+            }
+          }
+          ctx.fillStyle="white";
+          ctx.fillRect(0,0,32,32);
+        }
+        function drawCanvas(){
+          for(var i = 0;i<Matrix_Rows;i++){
+            for(var j = 0;j<Matrix_Cols;j++){
+              var col = dotTbl.rows[i].cells[j].style.backgroundColor;
+              ctx.fillStyle=col;
+              ctx.fillRect(j,i,1,1);
+            }
+          }
+        }
+        window.onload=function(){
+          dotTable();
+          colorTable();
+          clearCell();
+        }
+        function d_class(mei,you,ne,hon){
+          this.name=mei;
+          this.container=you;
+          this.price=ne;
+          this.num=hon;
+          this.proceeds=ne*hon;
+        }
+        d_class.prototype.tuika=function(ne,hon){
+          this.proceeds=ne*(hon+1);
+        }
+        var drink=[];
+        drink[0]=new d_class("cof","sti",120,80);
+        drink[1]=new d_class("orange","arumi",130,42);
+          drink[1].tuika(drink[1].price,drink[1].num);
+        for(var i=0;i<2;i++){
+          console.log(drink[i].name+"の売り上げは"+drink[i].proceeds);
+        }
+      </script>
+        <noscript>
+          javascriptをdekiruyouni
+        </noscript>
+    </body>
+    </html>
